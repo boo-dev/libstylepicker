@@ -1,0 +1,9 @@
+Package: libstylepicker
+Name: libstylepicker
+Version: 1.0
+Architecture: iphoneos-arm
+Description: A simple style picker implementation.
+Maintainer: Boo
+Author: Boo
+Section: System
+Tag: role::developer

@@ -1,0 +1,13 @@
+#include <Preferences/PSTableCell.h>
+#include <Preferences/PSSpecifier.h>
+#include "StylePickerOptionView.h"
+
+@interface StylePickerTableViewCell : PSTableCell {
+    StylePickerOptionView *_leftOptionView;
+    StylePickerOptionView *_rightOptionView;
+}
+@property (nonatomic,retain) StylePickerOptionView * leftOptionView;                                            //@synthesize _trailingGuide=__trailingGuide - In the implementation block
+@property (nonatomic,retain) StylePickerOptionView * rightOptionView;                                            //@synthesize _trailingGuide=__trailingGuide - In the implementation block
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier;
+- (void)didMoveToSuperview;
+@end
