@@ -15,10 +15,7 @@ include $(THEOS_MAKE_PATH)/library.mk
 include $(THEOS_MAKE_PATH)/bundle.mk
 
 setup::
-	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
-	@make
-	@echo "Copying library and headers..."
-	@cp $(THEOS_OBJ_DIR)/libstylepicker.dylib $(THEOS)/lib/libstylepicker.dylib
-	@mkdir $(THEOS)/include/libstylepicker/
-	@cp StylePickerTableViewCell.h $(THEOS)/include/libstylepicker/StylePickerTableViewCell.h
-	@echo "Done."
+	mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
+	cp .theos/obj/debug/libstylepicker.dylib $(THEOS)/lib
+	mkdir -p $(THEOS_STAGING_DIR)/usr/include/libstylepicker
+	cp StylePickerTableViewCell.h $(THEOS_STAGING_DIR)/usr/include/libstylepicker
