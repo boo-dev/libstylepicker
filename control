@@ -1,4 +1,4 @@
-Package: libstylepicker
+Package: com.boo.libstylepicker
 Name: libstylepicker
 Version: 1.0
 Architecture: iphoneos-arm

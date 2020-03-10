@@ -1,19 +1,10 @@
 #import "StylePickerOptionView.h"
-#import <UIKit/UIImage+Private.h>
 
 @implementation StylePickerOptionView
 @synthesize delegate; //synthesise  MyClassDelegate delegate
-- (id)initWithFrame:(struct CGRect)arg1 appearanceOption:(unsigned long long)arg2 properties:(NSMutableDictionary*)properties {
+- (id)initWithFrame:(struct CGRect)arg1 appearanceOption:(unsigned long long)arg2 {
     self = [super initWithFrame:arg1];
     if (self) {
-        switch (arg2) {
-            case 0:
-                _properties = properties[@"leftStyle"];
-                break;
-            case 1:
-                _properties = properties[@"rightStyle"];
-                break;
-        }
         _appearanceOption = arg2;
         [self _configureView];
     }
@@ -39,25 +30,27 @@
 }
 -(void)_configureView {
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
-    _stackView .translatesAutoresizingMaskIntoConstraints = NO;
     _stackView.axis = UILayoutConstraintAxisVertical;
     _stackView.alignment = UIStackViewAlignmentCenter;
+    _stackView.spacing = 10;
     _stackView.distribution = UIStackViewDistributionEqualSpacing;
     [self addSubview:_stackView];
-        
-    [_stackView.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
-    [_stackView.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
 
-   // NSBundle *globalBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/stylepicker.bundle"];
-    _previewImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:_properties[@"image"]]];
+    _stackView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_stackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor].active = YES;
+    [_stackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
+    [_stackView.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
+    [_stackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
+
+    _previewImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     _previewImageView.translatesAutoresizingMaskIntoConstraints = NO;
     _previewImageView.clipsToBounds = YES;
+    _previewImageView.contentMode = UIViewContentModeScaleAspectFill;
     _previewImageView.layer.cornerRadius = 5;
     [_stackView addArrangedSubview:_previewImageView];
 
     _label = [[UILabel alloc] initWithFrame:CGRectZero];
     _label.translatesAutoresizingMaskIntoConstraints = NO;
-    _label.text = _properties[@"label"];
     _label.textAlignment = NSTextAlignmentCenter;
     _label.font = [UIFont systemFontOfSize:17 weight:UIFontWeightRegular];
     [_stackView addArrangedSubview:_label];
@@ -72,18 +65,10 @@
     _pressRecognizer.minimumPressDuration = 0.025; //seconds
     _pressRecognizer.delegate = self;
     [self addGestureRecognizer:_pressRecognizer];
-    /*
-    switch (_appearanceOption) {
-        case 0:
-            _label.text = _properties[@"label"];
-            //_previewImageView.image = [UIImage imageNamed:_properties[@"leftImage"]];
-            break;
-        case 1:
-            _label.text = _properties[@"label"];
-            //_label.text = NSLocalizedStringFromTableInBundle(@"Dark", @"Common", globalBundle, comment);
-            //_previewImageView.image = [UIImage imageNamed:@"left-image" inBundle:globalBundle];
-            break;
-    }*/
+}
+-(void)setPreviewImage:(UIImage*)image {
+    _previewImage = image;
+    _previewImageView.image = _previewImage;
 }
 -(void)setEnabled:(BOOL)enabled {
     _enabled = enabled;

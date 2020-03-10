@@ -1,7 +1,8 @@
 #import "StylePickerTableViewCell.h"
+#import <UIKit/UIImage+Private.h>
 #include <notify.h>
 
-static CGFloat kCellSize = 210.f;
+//static CGFloat kCellSize = 210.f;
 
 @implementation StylePickerTableViewCell
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier {
@@ -9,35 +10,39 @@ static CGFloat kCellSize = 210.f;
 
     if (self) {
         [self setClipsToBounds:YES];
-        [self.contentView.widthAnchor constraintEqualToConstant:kCellSize].active = YES;
-        [self.contentView.heightAnchor constraintEqualToConstant:kCellSize].active = YES;
+        //[self.contentView.widthAnchor constraintEqualToConstant:kCellSize].active = YES;
 
-        if (!_leftOptionView) {
-            _leftOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:0 properties:specifier.properties];
-            NSLog(@"StylePicker: Specifier: %@, Properties: %@", specifier, specifier.properties);
-            _leftOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
-            _leftOptionView.translatesAutoresizingMaskIntoConstraints = false;
-            [self.contentView addSubview:_leftOptionView];
-        }
+        _leftOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:0];
+        _leftOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
+        [self.contentView addSubview:_leftOptionView];
+        
+        _rightOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:1];
+        _rightOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
+        [self.contentView addSubview:_rightOptionView];
 
-        if (!_rightOptionView) {
-            _rightOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:1 properties:specifier.properties];
-            _rightOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
-            _rightOptionView.translatesAutoresizingMaskIntoConstraints = false;
-            [self.contentView addSubview:_rightOptionView];
-        }
+        _leftOptionView.translatesAutoresizingMaskIntoConstraints = false;
+        [_leftOptionView.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor constant:-80].active = YES;
+        [_leftOptionView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor].active = YES;
 
-        [_leftOptionView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:15].active = YES;
-        [_leftOptionView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-15].active = YES;
-        [_leftOptionView.widthAnchor constraintEqualToConstant:60].active = YES;
-        [_leftOptionView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:75].active = YES;
-
-        [_rightOptionView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:15].active = YES;
-        [_rightOptionView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-15].active = YES;
-        [_rightOptionView.widthAnchor constraintEqualToConstant:60].active = YES;
-        [_rightOptionView.leadingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:25].active = YES;    
+        _rightOptionView.translatesAutoresizingMaskIntoConstraints = false;
+        [_rightOptionView.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor constant:80].active = YES;
+        [_rightOptionView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor].active = YES;
     }
     return self;
+}
+-(void)setCellTarget:(id)arg1 {
+    PSListController *parent = (PSListController *)arg1;
+    NSBundle *globalBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/stylepicker.bundle"];
+    NSBundle *prefBundle = [NSBundle bundleForClass:parent.class];
+    UIImage *leftImage = [UIImage imageNamed:self.specifier.properties[@"leftStyle"][@"image"] inBundle:prefBundle] ?: [UIImage imageNamed:@"left-image" inBundle:prefBundle];
+    UIImage *rightImage = [UIImage imageNamed:self.specifier.properties[@"rightStyle"][@"image"] inBundle:prefBundle] ?: [UIImage imageNamed:@"right-image" inBundle:prefBundle];
+
+    _leftOptionView.label.text = NSLocalizedStringFromTableInBundle(self.specifier.properties[@"leftStyle"][@"label"], @"Prefs", prefBundle, comment) ?: NSLocalizedStringFromTableInBundle(@"LIGHT", @"Common", globalBundle, comment);
+    _leftOptionView.previewImage = leftImage ?: [UIImage imageNamed:@"left-image" inBundle:globalBundle];
+
+    _rightOptionView.label.text = NSLocalizedStringFromTableInBundle(self.specifier.properties[@"rightStyle"][@"label"], @"Prefs", prefBundle, comment) ?: NSLocalizedStringFromTableInBundle(@"DARK", @"Common", globalBundle, comment);
+    _rightOptionView.previewImage = rightImage ?: [UIImage imageNamed:@"right-image" inBundle:globalBundle];
+    
 }
 -(void)userDidTapOnAppearanceOptionView:(StylePickerOptionView *)sender {
     NSNumber *someNumber = [NSNumber numberWithUnsignedLongLong:sender.appearanceOption];

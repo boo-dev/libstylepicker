@@ -6,6 +6,7 @@
 @interface StylePickerOptionView : UIView <UIGestureRecognizerDelegate> {
     UIStackView *_stackView;
     UIImageView *_previewImageView;
+    UIImage *_previewImage;
     UILabel *_timeLabel;
     UILabel *_label;
     NSMutableDictionary *_properties;
@@ -18,6 +19,7 @@
 }
 @property (nonatomic,retain) UIStackView * stackView;                                               //@synthesize _stackView=__stackView - In the implementation block
 @property (nonatomic,retain) UIImageView * previewImageView;  
+@property (nonatomic,retain) UIImage * previewImage;
 @property (nonatomic,retain) StyleCheckmarkView * checkView;                                               //@synthesize _stackView=__stackView - In the implementation block                                      //@synthesize _previewImageView=__previewImageView - In the implementation block
 @property (nonatomic,retain) UILabel *timeLabel;                                                   //@synthesize _timeLabel=__timeLabel - In the implementation block
 @property (nonatomic,retain) UILabel *label;  
@@ -34,7 +36,8 @@
 -(void)setEnabled:(BOOL)enabled;
 -(void)setHighlight:(BOOL)arg1 ;
 -(void)_configureView;
-- (id)initWithFrame:(struct CGRect)arg1 appearanceOption:(unsigned long long)arg2 properties:(NSMutableDictionary*)properties;
+-(void)setPreviewImage:(UIImage*)image;
+- (id)initWithFrame:(struct CGRect)arg1 appearanceOption:(unsigned long long)arg2 ;
 -(unsigned long long)appearanceOption;
 //-(void)set_checkmarkView:(DBSCheckmarkView *)arg1 ;
 -(void)_updateViewForCurrentStyle:(unsigned long long)arg1 ;
