@@ -11,7 +11,8 @@
     if (self) {
         [self setClipsToBounds:YES];
         //[self.contentView.widthAnchor constraintEqualToConstant:kCellSize].active = YES;
-
+	[self.contentView.heightAnchor constraintEqualToConstant:210].active = YES;
+	    
         _leftOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:0];
         _leftOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
         [self.contentView addSubview:_leftOptionView];
