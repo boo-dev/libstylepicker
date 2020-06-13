@@ -11,7 +11,8 @@
     if (self) {
         [self setClipsToBounds:YES];
         //[self.contentView.widthAnchor constraintEqualToConstant:kCellSize].active = YES;
-
+	[self.contentView.heightAnchor constraintEqualToConstant:210].active = YES;
+	    
         _leftOptionView = [[StylePickerOptionView alloc] initWithFrame:CGRectZero appearanceOption:0];
         _leftOptionView.delegate = (id<StylePickerOptionViewDelegate>)self;
         [self.contentView addSubview:_leftOptionView];
@@ -46,11 +47,13 @@
 }
 -(void)userDidTapOnAppearanceOptionView:(StylePickerOptionView *)sender {
     NSNumber *someNumber = [NSNumber numberWithUnsignedLongLong:sender.appearanceOption];
-
-   	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
-
-	[settings setObject:someNumber forKey:self.specifier.properties[@"key"]];
-	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]] error:nil];
+	
+	// If you use this way, you'll have to ask the user to respring to get new changes 
+   	//NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
+	//[settings setObject:someNumber forKey:self.specifier.properties[@"key"]];
+	//[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]] error:nil];
+	
+	// This way should just work
 	CFPreferencesSetAppValue((CFStringRef)self.specifier.properties[@"key"], (CFNumberRef)someNumber, (CFStringRef)self.specifier.properties[@"defaults"]);
 
     [_leftOptionView _updateViewForCurrentStyle:sender.appearanceOption];
